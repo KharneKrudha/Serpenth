@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html>
+<head>
+  
+  <title>Serpenth</title>
+  <script  src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<style>
+
+html {
+  height: 100%;
+}
+
+body {
+  background-image: linear-gradient(black, #882D61);
+}
+
+.piano {
+  position: absolute;
+  top: 290px;
+  left: 350px;
+  user-select: none;
+}
+
+.white-key {
+  width: 40px;
+  height: 120px;
+  padding-top: 90px;
+  background-color: #FFF;
+  border: 4px solid black;
+  border-radius: 0 0 6px 6px;
+  margin-left: -4px;
+  font-size: 11px;
+  color: green;
+  outline: none;
+  user-select: none;
+}
+
+.black-key {
+  position: absolute;
+  width: 24px;
+  height: 80px;
+  padding-top: 55px;
+  background-color: black;
+  border: 3px solid black;
+  border-radius: 0 0 2px 2px;
+  font-size: 11px;
+  color: green;
+  outline: none;
+  user-select: none;
+}
+
+.green-key {
+  background-color: green;
+  color: white;
+  user-select: none;
+}
+
+/*BLACK KEYS POSITIONS*/
+#codeKey83 {             
+  left: 22px;
+}
+
+#codeKey68 {
+  left: 58px;
+}
+
+#codeKey71 {
+  left: 130px;
+}
+
+#codeKey72 {
+  left: 166px;
+}
+
+#codeKey74 {
+  left: 202px;
+}
+
+#codeKey50 {
+  left: 274px;
+}
+
+#codeKey51 {
+  left: 310px;
+}
+
+#codeKey53 {
+  left: 382px;
+}
+
+#codeKey54 {
+  left: 418px;
+}
+
+#codeKey55 {
+  left: 454px;
+}
+
+#top-keyboard {
+  position: absolute;
+  top: 192px;
+  left: 346px;
+  top: 50px
+  left: 200px;  
+  width: 536px;
+  height: 90px;
+  background-color: gray;
+  border: 4px solid black;
+  user-select: none;
+}
+
+/*WAVES MENU*/
+#wave-forms0 {
+  position: absolute;
+  top: 205px;
+  left: 354px;
+  min-height: 11px;
+  width: 45px;
+  padding-top: 3px;
+  border: 3px solid black;
+  background-color: green;
+  text-align: center;
+  font-size: 8px;
+  color: black;
+  font-weight:bold;
+  user-select: none;
+}
+
+#button-right0 {
+  position: absolute;
+  top: 228px;
+  left: 382px;
+  height: 5px;
+  width: 5px;
+  border: 1px solid transparent;
+  background-color: black;
+  cursor: pointer;
+  user-select: none;
+}
+
+#button-left0 {
+  position: absolute;
+  top: 228px;
+  left: 362px;
+  height: 5px;
+  width: 5px;
+  border: 1px solid transparent;
+  background-color: black;
+  cursor: pointer;
+  user-select: none;
+}
+
+#wave-forms1 {
+  position: absolute;
+  top: 245px;
+  left: 354px;
+  min-height: 11px;
+  width: 45px;
+  padding-top: 3px;
+  border: 3px solid black;
+  background-color: green;
+  text-align: center;
+  font-size: 8px;
+  color: black;
+  font-weight:bold;
+  user-select: none;
+}
+
+#button-right1 {
+  position: absolute;
+  top: 268px;
+  left: 382px;
+  height: 5px;
+  width: 5px;
+  border: 1px solid transparent;
+  background-color: black;
+  cursor: pointer;
+  user-select: none;
+}
+
+#button-left1 {
+  position: absolute;
+  top: 268px;
+  left: 362px;
+  height: 5px;
+  width: 5px;
+  border: 1px solid transparent;
+  background-color: black;
+  cursor: pointer;
+  user-select: none;
+}
+
+.slider-volume {
+  -webkit-appearance: none;
+  position: absolute;
+  top: 268px;
+  left: 840px;
+  width: 35px;
+  height: 3px;
+  background: black;
+  outline: none;
+  user-select: none;
+}
+
+.slider-volume::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 7px;
+  height: 3px;
+  background: green;
+  cursor: pointer;
+  z-index: 1
+}
+
+.slider-volume::-moz-range-thumb {
+  width: 25px;
+  height: 3px;
+  background: #4CAF50;
+  cursor: pointer;
+}
+
+#p-volume{
+  position: absolute;
+  top: 255px;
+  left: 843px;
+  font-size: 7px;
+  font-weight:bold;
+  user-select: none;
+}
+
+</style>
+</head>
+<body>
+  
+  <div id="keyBoard"></div>
+  <div id="top-keyboard"></div>
+  <div id="waves0"></div>
+  <div id="waves1"></div>
+  <div id="waves2"></div>
+  <div id="waves3"></div>
+  <div id="buttons0"></div>
+  <div id="buttons1"></div>
+  <div id="buttons2"></div>
+  <div id="buttons3"></div>
+  <p id="p-volume">VOLUME</p>
+  <input type="range" min="0" max="100" class="slider-volume" id="myRange" onclick="changeVolume()">
+
+</body>
+<script>
+
+  $(document).ready(function(){
+    createKeyboard();
+    createWaveMenu();
+    createButtonsLeftRight();
+    incrementIndexWave();
+    decrementIndexWave(); 
+    changeVolume();
+   });
+  
+  // CREATE THE OSCILLATOR
+  let ctx = new window.AudioContext();
+  let osc0;
+  let osc1;
+  var gainNode;
+  
+  // GLOBAL VARIABLES AMP
+  var attack = 1;
+  var release = 0.15;
+
+  // GLOBAL VARIABLES
+  var newVolume;
+  var playing = false;
+
+  // GLOBAL VARIABLES FOR WAVE MENU 
+  var waveOscType = ['sine', 'triangle', 'square', 'sawtooth'];
+  var waveForms = ['SINE', 'TRIAN.', 'SQUAR.', 'SAWTO.'];
+
+  var indexWave0 = 0;
+  var indexWave1 = 0;
+  
+  function createKeyboard(){
+    var blackKey = ['S', 'D', 'G', 'H', 'J', '2', '3', '5', '6', '7'];
+    var blackKeyCode = ['83', '68', '71', '72', '74', '50', '51', '53', '54', '55'];
+    var blackKeyFreq = ['34.65', '38.89', '46.25', '51.91', '58.27', '69.30', '77.78', '92.50', '103.83', '116.54'];
+
+    var whiteKey = ['Z', 'X', 'C', 'V', 'B', 'N', 'M', 'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I'];
+    var whiteKeyCode = ['90', '88', '67', '86', '66', '78', '77', '81', '87', '69', '82', '84', '89', '85', '73'];
+    var whiteKeyFreq = ['32.70', '36.71', '41.20', '43.65', '49.00', '55.00', '61.74', '65.41', '73.42', '82.41', '87.31', '98.00', '110.00', '123.47', '130.81'];
+    
+    var keyBoard = '<div class="piano">'; 
+    
+    for(var j=0;j<10;j++){
+        keyBoard +='<button class="black-key" id="codeKey'+blackKeyCode[j]+'" value="'+blackKeyFreq[j]+'">'+blackKey[j]+'</button>';
+    }     
+    for(var i=0;i<15;i++) {
+      keyBoard +='<button class="white-key" id="codeKey'+whiteKeyCode[i]+'" value="'+whiteKeyFreq[i]+'">'+whiteKey[i]+'</button>';
+    }
+        keyBoard +='</div>';
+
+        $('#keyBoard').append(keyBoard);
+  }
+
+  window.addEventListener("keydown", checkKeyDown, false);
+  window.addEventListener("keyup", checkKeyUp, false);
+
+  function checkKeyDown(key){
+    for(var i=49;i<=122;i++){
+      if((key.keyCode == i) && !playing){
+        
+        $('#codeKey'+i).addClass("green-key");
+        var noteFrequency = $('#codeKey'+i).val();
+        
+        osc0 = ctx.createOscillator();
+        osc0.frequency.value = parseFloat(noteFrequency);
+        osc0.type = waveOscType[indexWave0];
+
+        osc1 = ctx.createOscillator();
+        osc1.frequency.value = parseFloat(noteFrequency);
+        osc1.type = waveOscType[indexWave1];
+        
+        gainNode = ctx.createGain();
+        gainNode.gain.value = newVolume;
+        osc0.connect(gainNode);
+        osc1.connect(gainNode);
+        gainNode.connect(ctx.destination);
+
+        osc0.start();
+        osc1.start();
+
+
+        playing = true;
+
+      }
+    }
+  }
+
+  function checkKeyUp(key){
+    for(var i=49;i<=122;i++){
+      if((key.keyCode == i) && playing){
+        
+        $('#codeKey'+i).removeClass("green-key");
+
+          osc0.stop();
+          osc1.stop();
+
+        playing = false;
+      }
+    }
+  }
+  
+  function createWaveMenu(){
+    for(i=0;i<2;i++){
+      var wavesMenu ='<div id="wave-forms'+i+'">';
+          wavesMenu += waveForms[0];
+          wavesMenu +='</div>';
+      $('#waves'+i).append(wavesMenu);
+    }
+  }
+
+  function createButtonsLeftRight(){
+    var button;
+    for(i=0;i<2;i++){
+      button +='<button id="button-right'+i+'" onclick="incrementIndexWave(\''+i+'\')"></button>';
+      button +='<button id="button-left'+i+'" onclick="decrementIndexWave(\''+i+'\')"></button>';
+      $('#buttons'+i).append(button);
+    }
+  }
+
+  function incrementIndexWave(index){
+    if((index == 0) && (indexWave0 < 3)){
+      indexWave0++;
+      $('#wave-forms'+index).html(waveForms[indexWave0]);
+    }else if((index == 0) && (indexWave0 == 3)){
+      indexWave0 = 3;
+      $('#wave-forms'+index).html(waveForms[indexWave0]);
+    }
+
+    if((index == 1) && (indexWave1 < 3)){
+      indexWave1++;
+      $('#wave-forms'+index).html(waveForms[indexWave1]);
+    }else if((index == 1) && (indexWave1 == 3)){
+      indexWave1 = 3;
+      $('#wave-forms'+index).html(waveForms[indexWave1]);
+    }
+  }
+
+  function decrementIndexWave(index){
+    if((index == 0) && (indexWave0 == 0)){
+      indexWave0 = 0;
+      $('#wave-forms'+index).html(waveForms[indexWave0]);
+    } else if ((index == 0) && (indexWave0 != 0 )){
+      indexWave0--;
+      $('#wave-forms'+index).html(waveForms[indexWave0]);
+    } 
+
+    if((index == 1) && (indexWave1 == 0)){
+      indexWave1 = 0;
+      $('#wave-forms'+index).html(waveForms[indexWave1]);
+    } else if ((index == 1) && (indexWave1 != 0 )){
+      indexWave1--;
+      $('#wave-forms'+index).html(waveForms[indexWave1]);
+    }
+  }
+           
+  function changeVolume(){
+    var slider = document.getElementById('myRange');
+    newVolume = slider.value / 100;
+
+    slider.oninput = function() {
+      newVolume = this.value / 100;
+      $('#wave-forms0').html(this.value + '%');
+    }
+  }
+  
+
+
+
+
+  
+              
+</script>
+</html>
